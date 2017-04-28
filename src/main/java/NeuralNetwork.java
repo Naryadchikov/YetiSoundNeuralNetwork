@@ -37,7 +37,7 @@ public class NeuralNetwork {
             layers.get(i).recalculateConnection(layers.get(i + 1), trainingSpeed, momentum);
         }
 
-        for (int i = 1; i < layers.size() - 1; i++) {
+        for (int i = 1; i < layers.size(); i++) {
             layers.get(i).recalculateLayer();
         }
     }
