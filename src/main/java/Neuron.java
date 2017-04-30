@@ -24,4 +24,10 @@ public interface Neuron {
 
     /** Пересчитывает выходные данные. */
     void recalculateOutputData();
+
+    /** Изменяет входные данные нейронов
+     * @param index Номер входящего синапса.
+     * @param newInputData Новые входные данные.
+     */
+    void changeInputSynapseData(int index, float newInputData);
 }

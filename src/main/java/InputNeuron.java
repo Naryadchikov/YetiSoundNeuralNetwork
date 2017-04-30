@@ -46,4 +46,13 @@ public class InputNeuron implements Neuron {
     public void recalculateOutputData() {
 
     }
+
+    /** Изменяет входные данные нейронов
+     * @param index Номер входящего синапса.
+     * @param newInputData Новые входные данные.
+     */
+    @Override
+    public void changeInputSynapseData(int index, float newInputData) {
+
+    }
 }

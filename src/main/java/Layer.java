@@ -17,8 +17,11 @@ public interface Layer {
      */
     void recalculateConnection(Layer nextLayer, float trainingSpeed, float momentum);
 
-    /** Пересчитывает данные слоя. */
-    void recalculateLayer();
+    /**
+     * Пересчитывает данные следующего слоя.
+     * @param nextLayer Следующий слой.
+     */
+    void recalculateNextLayer(Layer nextLayer);
 
     /** @return Количество нейронов в слое. */
     int getNumberOfNeurons();

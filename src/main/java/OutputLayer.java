@@ -40,12 +40,13 @@ public class OutputLayer implements Layer {
 
     }
 
-    /** Пересчитывает данные слоя. */
+    /**
+     * Пересчитывает данные следующего слоя.
+     * @param nextLayer Следующий слой.
+     */
     @Override
-    public void recalculateLayer() {
-        for (int i = 0; i < numberOfNeurons; i++) {
-            neurons[i].recalculateOutputData();
-        }
+    public void recalculateNextLayer(Layer nextLayer) {
+
     }
 
     /** @return Количество нейронов в слое. */

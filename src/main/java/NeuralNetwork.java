@@ -32,9 +32,9 @@ public class NeuralNetwork {
     }
 
     /** Одна итерация. */
-    public void iteration() {
-        for (int i = 1; i < layers.size(); i++) {
-            layers.get(i).recalculateLayer();
+    private void iteration() {
+        for (int i = 0; i < layers.size() - 1; i++) {
+            layers.get(i).recalculateNextLayer(layers.get(i + 1));
         }
     }
 
@@ -43,10 +43,7 @@ public class NeuralNetwork {
         for (int i = layers.size() - 2; i >= 0; i--) {
             layers.get(i).recalculateConnection(layers.get(i + 1), trainingSpeed, momentum);
         }
-
-        for (int i = 1; i < layers.size(); i++) {
-            layers.get(i).recalculateLayer();
-        }
+        iteration();
     }
 
     /**
@@ -101,6 +98,8 @@ public class NeuralNetwork {
         tmp.add(new InputLayer(newInputData));
         tmp.addAll(layers);
         layers = tmp;
+
+        iteration();
     }
 
     /**

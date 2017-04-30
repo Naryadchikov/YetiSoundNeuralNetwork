@@ -69,11 +69,20 @@ public class HiddenLayer implements Layer {
         isTrainedBefore = true;
     }
 
-    /** Пересчитывает данные слоя. */
+    /**
+     * Пересчитывает данные следующего слоя.
+     * @param nextLayer Следующий слой.
+     */
     @Override
-    public void recalculateLayer() {
+    public void recalculateNextLayer(Layer nextLayer) {
         for (int i = 0; i < numberOfNeurons; i++) {
-            neurons[i].recalculateOutputData();
+            for (int j = 0; j < nextLayer.getNumberOfNeurons(); j++) {
+                nextLayer.getNeuron(j).changeInputSynapseData(i, neurons[i].getOutputData());
+            }
+        }
+
+        for (int i = 0; i < nextLayer.getNumberOfNeurons(); i++) {
+            nextLayer.getNeuron(i).recalculateOutputData();
         }
     }
 
