@@ -48,9 +48,11 @@ public class HiddenLayer implements Layer {
         }
 
         for (int i = 0; i < nextLayer.getNumberOfNeurons(); i++) {
-            for (Synapse synapse : nextLayer.getNeuron(i).getInputSynapses()) {
-                tmp += synapse.getWeight() * nextLayer.getDelta(i);
-            }
+            try {
+                for (Synapse synapse : nextLayer.getNeuron(i).getInputSynapses()) {
+                    tmp += synapse.getWeight() * nextLayer.getDelta(i);
+                }
+            } catch (NullPointerException ignored) {}
         }
 
         for (int i = 0; i < numberOfNeurons; i++) {

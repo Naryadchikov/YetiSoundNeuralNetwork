@@ -74,4 +74,12 @@ public class OutputLayer implements Layer {
 
         return (idealData[index] - outputData) * (1 - outputData) * outputData;
     }
+
+    /**
+     * Меняет идеальные данные нейронов слоя на новые.
+     * @param newIdealData Новые идеальные данные.
+     */
+    public void changeIdealData(float[] newIdealData) {
+       idealData = newIdealData;
+    }
 }
