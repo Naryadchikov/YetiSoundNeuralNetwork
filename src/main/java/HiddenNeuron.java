@@ -81,9 +81,6 @@ public class HiddenNeuron implements Neuron {
     @Override
     public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
         if (!isBias) {
-            if (newInputSynapses.length != inputSynapses.length) {
-                throw new UnsupportedOperationException();
-            }
             inputSynapses = newInputSynapses;
             recalculateOutputData();
         }

@@ -63,9 +63,6 @@ public class OutputNeuron implements Neuron {
     /** Пересчитывает входные данные нейронов */
     @Override
     public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
-        if (newInputSynapses.length != inputSynapses.length) {
-            throw new UnsupportedOperationException();
-        }
         inputSynapses = newInputSynapses;
         recalculateOutputData();
     }
