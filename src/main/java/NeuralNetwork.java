@@ -31,6 +31,13 @@ public class NeuralNetwork {
         }
     }
 
+    /** Одна итерация. */
+    public void iteration() {
+        for (int i = 1; i < layers.size(); i++) {
+            layers.get(i).recalculateLayer();
+        }
+    }
+
     /** Одна тренировочная итерация по Методу Обратного Распространения (МОР). */
     public void train() {
         for (int i = layers.size() - 2; i >= 0; i--) {
