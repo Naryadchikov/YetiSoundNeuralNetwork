@@ -4,17 +4,11 @@
 public class Launcher {
 
     public static void main(String[] args) {
-        NeuralNetwork XoRNetwork = new NeuralNetwork(0.00001f, 0.05f);
-        float[][] inputData = { {0.2f, 0.1f}, {0.3f, 0.5f}, {0.1f, 0.0f},
-                                {0.5f, 0.5f}, {0.2f, 0.4f}, {0.2f, 0.3f},
-                                {0.0f, 0.1f}, {0.2f, 0.0f}, {0.4f, 0.0f},
-                                {0.3f, 0.2f}, {0.1f, 0.7f}, {0.3f, 0.6f},
-                                {0.7f, 0.2f}, {0.5f, 0.2f}, {0.6f, 0.2f},
-                                {0.2f, 0.1f}, {0.1f, 0.1f}, {0.1f, 0.3f} };
-        float[][] idealData = { {0.3f}, {0.8f}, {0.1f}, {0.9f}, {0.6f}, {0.5f},
-                                {0.1f}, {0.2f}, {0.4f}, {0.5f}, {0.8f}, {0.9f},
-                                {0.9f}, {0.7f}, {0.8f}, {0.3f}, {0.2f}, {0.4f} };
-        int lastEpoch = 100000;
+        NeuralNetwork XoRNetwork = new NeuralNetwork(0.0001f, 0.05f);
+        float[][] inputData = {{0.2f, 0.1f}, {0.3f, 0.5f}, {0.1f, 0.0f}, {0.5f, 0.5f}, {0.2f, 0.4f}, {0.2f, 0.3f}};
+        float[][] idealData = {{0.3f}, {0.8f}, {0.1f}, {0.9f}, {0.6f}, {0.5f}};
+        int lastEpoch = 10000;
+        int trainingSets = 6;
 
         XoRNetwork.addLayer(new InputLayer(inputData[0]));
         XoRNetwork.addLayer(new HiddenLayer(5));
@@ -25,26 +19,35 @@ public class Launcher {
         XoRNetwork.start();
 
         for (int i = 0; i < lastEpoch; i++) {
-            for (int j = 0; j < idealData.length; j++) {
+            for (int j = 0; j < trainingSets; j++) {
                 XoRNetwork.changeInputData(inputData[j]);
                 XoRNetwork.changeIdealData(idealData[j]);
                 XoRNetwork.train();
             }
         }
 
-        float[][] testData = {{0.3f, 0.4f}, {0.1f, 0.6f}, {0.0f, 0.1f}, {0.1f, 0.3f}};
-        float[][] idealTestResult = {{0.7f}, {0.7f}, {0.1f}, {0.4f}};
-        float[] resultData;
+        float[] testData1 = {0.3f, 0.4f};
+        float[] idealTestResult1 = {0.7f};
 
-        for (int i = 0; i < testData.length; i++) {
-            XoRNetwork.changeInputData(testData[i]);
-            XoRNetwork.changeIdealData(idealTestResult[i]);
-            XoRNetwork.iteration();
+        XoRNetwork.changeInputData(testData1);
+        XoRNetwork.changeIdealData(idealTestResult1);
+        XoRNetwork.iteration();
 
-            resultData = XoRNetwork.getResultData();
+        float[] resultData1 = XoRNetwork.getResultData();
 
-            System.out.println("Final result is: " + resultData[0]);
-            System.out.println("Ideal answer is: " + idealTestResult[i][0]);
-        }
+        System.out.println("Final result is: " + resultData1[0]);
+        System.out.println("Ideal answer is: " + idealTestResult1[0]);
+
+        float[] testData2 = {0.2f, 0.2f};
+        float[] idealTestResult2 = {0.4f};
+
+        XoRNetwork.changeInputData(testData2);
+        XoRNetwork.changeIdealData(idealTestResult2);
+        XoRNetwork.iteration();
+
+        float[] resultData2 = XoRNetwork.getResultData();
+
+        System.out.println("Final result is: " + resultData2[0]);
+        System.out.println("Ideal answer is: " + idealTestResult2[0]);
     }
 }
