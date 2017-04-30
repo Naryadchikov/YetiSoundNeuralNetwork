@@ -9,13 +9,14 @@ public class InputLayer implements Layer {
     private boolean isTrainedBefore;
 
     public InputLayer(float[] data) {
-        numberOfNeurons = data.length;
+        numberOfNeurons = data.length + 1;
         neurons = new Neuron[numberOfNeurons];
         isTrainedBefore = false;
 
-        for (int i = 0; i < numberOfNeurons; i++) {
+        for (int i = 0; i < numberOfNeurons - 1; i++) {
             neurons[i] = new InputNeuron(data[i]);
         }
+        neurons[numberOfNeurons - 1] = new InputNeuron(); // Создается нейрон смещения
     }
 
     /**

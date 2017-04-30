@@ -18,6 +18,7 @@ public class HiddenNeuron implements Neuron {
         outputData = 1 / (1 + (float) Math.pow(Math.E, -inputData));
     }
 
+    /** Создается нейрон смещения */
     public HiddenNeuron() {
         isBias = true;
         inputSynapses = null;
@@ -34,7 +35,11 @@ public class HiddenNeuron implements Neuron {
     /** @return Все входящие в нейрон синапсы. */
     @Override
     public Synapse[] getInputSynapses() {
-        return inputSynapses;
+        if (!isBias) {
+            return inputSynapses;
+        }
+
+        return null;
     }
 
     /**
@@ -53,9 +58,11 @@ public class HiddenNeuron implements Neuron {
      */
     @Override
     public void changeInputSynapse(int index, float deltaW) {
-        float newW = inputSynapses[index].getWeight() + deltaW;
+        if (!isBias) {
+            float newW = inputSynapses[index].getWeight() + deltaW;
 
-        inputSynapses[index].setWeight(newW);
+            inputSynapses[index].setWeight(newW);
+        }
     }
 
     /** Пересчитывает выходные данные. */

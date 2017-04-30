@@ -42,6 +42,29 @@ public class NeuralNetwork {
         }
     }
 
+    /**
+     * Считает ошибку полученного результата по MSE.
+     * @param idealData Идеальный ответ.
+     * @return Ошибку по MSE.
+     * @throws UnsupportedOperationException Если размера массива идеальных данных не совпадает
+     *                                       с количемтвом нейронов в выходном слое.
+     */
+    public float meanSquaredError(float[] idealData) {
+        int numberOfNeurons = layers.get(layers.size() - 1).getNumberOfNeurons();
+        float error = 0;
+
+        if (idealData.length != numberOfNeurons) {
+            throw new UnsupportedOperationException();
+        }
+
+        for (int i = 0; i < numberOfNeurons; i++) {
+            error += Math.pow(idealData[i] - layers.get(layers.size() - 1).getNeuron(i).getOutputData(), 2);
+        }
+        error /= numberOfNeurons;
+
+        return error;
+    }
+
     /** @return Результат работы нейронной сети. */
     public float[] getResultData() {
         int numberOfNeurons = layers.get(layers.size() - 1).getNumberOfNeurons();
