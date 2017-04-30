@@ -84,18 +84,20 @@ public class NeuralNetwork {
     /**
      * Меняет входные данные.
      * @param newInputData Новые входные данные.
+     * @param isWithBias Есть ли нейрон смещения.
      * @throws UnsupportedOperationException Если размера массива новых входных данных не совпадает
      *                                       с количемтвом нейронов в входном слое.
      */
-    public void changeInputData(float[] newInputData) {
-        if (newInputData.length != layers.get(0).getNumberOfNeurons() - 1) {
+    public void changeInputData(boolean isWithBias, float[] newInputData) {
+        if ((isWithBias && newInputData.length != layers.get(0).getNumberOfNeurons() - 1) ||
+            (!isWithBias && newInputData.length != layers.get(0).getNumberOfNeurons())) {
             throw new UnsupportedOperationException();
         }
 
         List<Layer> tmp = new ArrayList<Layer>();
 
         layers.remove(0);
-        tmp.add(new InputLayer(newInputData));
+        tmp.add(new InputLayer(isWithBias, newInputData));
         tmp.addAll(layers);
         layers = tmp;
 

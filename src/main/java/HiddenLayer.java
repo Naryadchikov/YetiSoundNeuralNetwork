@@ -4,12 +4,14 @@
 public class HiddenLayer implements Layer {
 
     private Neuron[] neurons;
+    private boolean isWithBias;
     private int numberOfNeurons;
     private float[] deltas;
     private float[][] previousDeltaW;
     private boolean isTrainedBefore;
 
-    public HiddenLayer(int numberOfNeurons) {
+    public HiddenLayer(boolean isWithBias, int numberOfNeurons) {
+        this.isWithBias = isWithBias;
         this.numberOfNeurons = numberOfNeurons;
         neurons = new Neuron[numberOfNeurons];
         deltas = new float[numberOfNeurons];
@@ -22,7 +24,9 @@ public class HiddenLayer implements Layer {
      */
     @Override
     public void connect(Layer previousLayer) {
-        for (int i = 0; i < numberOfNeurons - 1; i++) {
+        int numberWithoutBias = (isWithBias) ? numberOfNeurons - 1 : numberOfNeurons;
+
+        for (int i = 0; i < numberWithoutBias; i++) {
             Synapse[] inputSynapses = new Synapse[previousLayer.getNumberOfNeurons()];
 
             for (int j = 0; j < inputSynapses.length; j++) {
@@ -30,7 +34,10 @@ public class HiddenLayer implements Layer {
             }
             neurons[i] = new HiddenNeuron(inputSynapses);
         }
-        neurons[numberOfNeurons - 1] = new HiddenNeuron(); // Создается нейрон смещения
+
+        if (isWithBias) {
+            neurons[numberWithoutBias] = new HiddenNeuron(); // Создается нейрон смещения
+        }
     }
 
     /**
