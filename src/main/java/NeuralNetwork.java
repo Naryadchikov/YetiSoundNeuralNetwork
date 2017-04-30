@@ -76,4 +76,44 @@ public class NeuralNetwork {
 
         return resultData;
     }
+
+    /**
+     * Меняет входные данные.
+     * @param newInputData Новые входные данные.
+     * @throws UnsupportedOperationException Если размера массива новых входных данных не совпадает
+     *                                       с количемтвом нейронов в входном слое.
+     */
+    public void changeInputData(float[] newInputData) {
+        if (newInputData.length != layers.get(0).getNumberOfNeurons() - 1) {
+            throw new UnsupportedOperationException();
+        }
+
+        List<Layer> tmp = new ArrayList<Layer>();
+
+        layers.remove(0);
+        tmp.add(new InputLayer(newInputData));
+        tmp.addAll(layers);
+        layers = tmp;
+    }
+
+    /**
+     * Меняет идеальные данные выходного слоя на новые.
+     * @param newIdealData Новые идеальные данные.
+     * @throws UnsupportedOperationException Если размера массива новых идеальных данных не совпадает
+     *                                       с количемтвом нейронов в выходном слое.
+     */
+    public void changeIdealData(float[] newIdealData) {
+        int numberOfNeurons = layers.get(layers.size() - 1).getNumberOfNeurons();
+        int layersNumber = layers.size();
+
+        if (newIdealData.length != numberOfNeurons) {
+            throw new UnsupportedOperationException();
+        }
+
+        OutputLayer newOutputLayer = (OutputLayer) layers.get(layersNumber - 1);
+
+        newOutputLayer.changeIdealData(newIdealData);
+        layers.remove(layersNumber - 1);
+        layers.add(newOutputLayer);
+    }
 }
