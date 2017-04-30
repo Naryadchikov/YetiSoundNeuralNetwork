@@ -33,4 +33,12 @@ public class Synapse {
     public float getOutputData() {
         return inputData * weight;
     }
+
+    /**
+     * Установить новое значение входных данных.
+     * @param inputData Новые входные данные.
+     */
+    public void setInputData(float inputData) {
+        this.inputData = inputData;
+    }
 }

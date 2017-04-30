@@ -4,21 +4,12 @@
 public class Launcher {
 
     public static void main(String[] args) {
-        NeuralNetwork XoRNetwork = new NeuralNetwork(0.00001f, 0.05f);
-        float[][] inputData = { {0.2f, 0.1f}, {0.3f, 0.5f}, {0.1f, 0.0f},
-                                {0.5f, 0.5f}, {0.2f, 0.4f}, {0.2f, 0.3f},
-                                {0.0f, 0.1f}, {0.2f, 0.0f}, {0.4f, 0.0f},
-                                {0.3f, 0.2f}, {0.1f, 0.7f}, {0.3f, 0.6f},
-                                {0.7f, 0.2f}, {0.5f, 0.2f}, {0.6f, 0.2f},
-                                {0.2f, 0.1f}, {0.1f, 0.1f}, {0.1f, 0.3f} };
-        float[][] idealData = { {0.3f}, {0.8f}, {0.1f}, {0.9f}, {0.6f}, {0.5f},
-                                {0.1f}, {0.2f}, {0.4f}, {0.5f}, {0.8f}, {0.9f},
-                                {0.9f}, {0.7f}, {0.8f}, {0.3f}, {0.2f}, {0.4f} };
+        NeuralNetwork XoRNetwork = new NeuralNetwork(0.7f, 0.3f);
+        float[][] inputData = { {0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f} };
+        float[][] idealData = { {0.0f}, {1.0f}, {1.0f}, {0.0f} };
         int lastEpoch = 100000;
 
         XoRNetwork.addLayer(new InputLayer(inputData[0]));
-        XoRNetwork.addLayer(new HiddenLayer(5));
-        XoRNetwork.addLayer(new HiddenLayer(4));
         XoRNetwork.addLayer(new HiddenLayer(3));
         XoRNetwork.addLayer(new OutputLayer(idealData[0]));
 
@@ -32,14 +23,13 @@ public class Launcher {
             }
         }
 
-        float[][] testData = {{0.3f, 0.4f}, {0.1f, 0.6f}, {0.0f, 0.1f}, {0.1f, 0.3f}};
-        float[][] idealTestResult = {{0.7f}, {0.7f}, {0.1f}, {0.4f}};
+        float[][] testData = { {0.0f, 0.0f}, {1.0f, 0.0f} };
+        float[][] idealTestResult = { {0.0f}, {1.0f} };
         float[] resultData;
 
         for (int i = 0; i < testData.length; i++) {
             XoRNetwork.changeInputData(testData[i]);
             XoRNetwork.changeIdealData(idealTestResult[i]);
-            XoRNetwork.iteration();
 
             resultData = XoRNetwork.getResultData();
 

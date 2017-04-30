@@ -60,10 +60,12 @@ public class OutputNeuron implements Neuron {
         outputData = 1 / (1 + (float) Math.pow(Math.E, -inputData));
     }
 
-    /** Пересчитывает входные данные нейронов */
+    /** Изменяет входные данные нейронов
+     * @param index Номер входящего синапса.
+     * @param newInputData Новые входные данные.
+     */
     @Override
-    public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
-        inputSynapses = newInputSynapses;
-        recalculateOutputData();
+    public void changeInputSynapseData(int index, float newInputData) {
+        inputSynapses[index].setInputData(newInputData);
     }
 }

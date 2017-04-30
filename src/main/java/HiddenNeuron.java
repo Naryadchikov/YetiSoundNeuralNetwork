@@ -77,12 +77,14 @@ public class HiddenNeuron implements Neuron {
         }
     }
 
-    /** Пересчитывает входные данные нейронов */
+    /** Изменяет входные данные нейронов
+     * @param index Номер входящего синапса.
+     * @param newInputData Новые входные данные.
+     */
     @Override
-    public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
+    public void changeInputSynapseData(int index, float newInputData) {
         if (!isBias) {
-            inputSynapses = newInputSynapses;
-            recalculateOutputData();
+            inputSynapses[index].setInputData(newInputData);
         }
     }
 }
