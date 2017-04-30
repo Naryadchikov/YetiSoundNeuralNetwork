@@ -7,17 +7,18 @@ public class Launcher {
         NeuralNetwork XoRNetwork = new NeuralNetwork(0.7f, 0.3f);
         float[][] inputData = { {0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f} };
         float[][] idealData = { {0.0f}, {1.0f}, {1.0f}, {0.0f} };
+        boolean isWithBias = true;
         int lastEpoch = 100000;
 
-        XoRNetwork.addLayer(new InputLayer(inputData[0]));
-        XoRNetwork.addLayer(new HiddenLayer(3));
+        XoRNetwork.addLayer(new InputLayer(isWithBias, inputData[0]));
+        XoRNetwork.addLayer(new HiddenLayer(isWithBias, 3));
         XoRNetwork.addLayer(new OutputLayer(idealData[0]));
 
         XoRNetwork.start();
 
         for (int i = 0; i < lastEpoch; i++) {
             for (int j = 0; j < idealData.length; j++) {
-                XoRNetwork.changeInputData(inputData[j]);
+                XoRNetwork.changeInputData(isWithBias, inputData[j]);
                 XoRNetwork.changeIdealData(idealData[j]);
                 XoRNetwork.train();
             }
@@ -28,7 +29,7 @@ public class Launcher {
         float[] resultData;
 
         for (int i = 0; i < testData.length; i++) {
-            XoRNetwork.changeInputData(testData[i]);
+            XoRNetwork.changeInputData(isWithBias, testData[i]);
             XoRNetwork.changeIdealData(idealTestResult[i]);
 
             resultData = XoRNetwork.getResultData();

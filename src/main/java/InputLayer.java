@@ -8,15 +8,20 @@ public class InputLayer implements Layer {
     private float[][] previousDeltaW;
     private boolean isTrainedBefore;
 
-    public InputLayer(float[] data) {
-        numberOfNeurons = data.length + 1;
+    public InputLayer(boolean isWithBias, float[] data) {
+        numberOfNeurons = (isWithBias) ? data.length + 1 : data.length;
         neurons = new Neuron[numberOfNeurons];
         isTrainedBefore = false;
 
-        for (int i = 0; i < numberOfNeurons - 1; i++) {
+        int numberWithoutBias = (isWithBias) ? numberOfNeurons - 1 : numberOfNeurons;
+
+        for (int i = 0; i < numberWithoutBias; i++) {
             neurons[i] = new InputNeuron(data[i]);
         }
-        neurons[numberOfNeurons - 1] = new InputNeuron(); // Создается нейрон смещения
+
+        if (isWithBias) {
+            neurons[numberWithoutBias] = new InputNeuron(); // Создается нейрон смещения
+        }
     }
 
     /**
