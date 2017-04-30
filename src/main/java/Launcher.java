@@ -14,12 +14,16 @@ public class Launcher {
 
         XoRNetwork.start();
 
-        for (int i = 0; i < 100000; i++) {
+        int counter = 0;
+
+        while (XoRNetwork.meanSquaredError(idealData) > 0.00001) {
             XoRNetwork.train();
+            counter++;
         }
 
         float[] resultData = XoRNetwork.getResultData();
 
-        System.out.println(resultData[0]);
+        System.out.println("Answer after " + counter + " iterations is: " + resultData[0]);
+        System.out.println("Ideal answer is: " + idealData[0]);
     }
 }
