@@ -20,6 +20,9 @@ public interface Layer {
     /** Пересчитывает данные слоя. */
     void recalculateLayer();
 
+    /** Пересчитывает данные слоя с изменением входных данных синапсов. */
+    void recalculateLayerWithSynapses(Layer previousLayer);
+
     /** @return Количество нейронов в слое. */
     int getNumberOfNeurons();
 

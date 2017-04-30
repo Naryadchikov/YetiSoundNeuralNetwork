@@ -59,6 +59,12 @@ public class InputLayer implements Layer {
 
     }
 
+    /** Пересчитывает данные слоя с изменением входных данных синапсов. */
+    @Override
+    public void recalculateLayerWithSynapses(Layer previousLayer) {
+
+    }
+
     /** @return Количество нейронов в слое. */
     @Override
     public int getNumberOfNeurons() {

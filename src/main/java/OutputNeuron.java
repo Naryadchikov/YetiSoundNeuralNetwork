@@ -59,4 +59,14 @@ public class OutputNeuron implements Neuron {
         }
         outputData = 1 / (1 + (float) Math.pow(Math.E, -inputData));
     }
+
+    /** Пересчитывает входные данные нейронов */
+    @Override
+    public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
+        if (newInputSynapses.length != inputSynapses.length) {
+            throw new UnsupportedOperationException();
+        }
+        inputSynapses = newInputSynapses;
+        recalculateOutputData();
+    }
 }

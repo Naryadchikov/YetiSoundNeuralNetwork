@@ -46,4 +46,10 @@ public class InputNeuron implements Neuron {
     public void recalculateOutputData() {
 
     }
+
+    /** Пересчитывает входные данные нейронов */
+    @Override
+    public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
+
+    }
 }

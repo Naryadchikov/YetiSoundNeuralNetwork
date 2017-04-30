@@ -48,6 +48,19 @@ public class OutputLayer implements Layer {
         }
     }
 
+    /** Пересчитывает данные слоя с изменением входных данных синапсов. */
+    @Override
+    public void recalculateLayerWithSynapses(Layer previousLayer) {
+        for (int i = 0; i < numberOfNeurons; i++) {
+            Synapse[] oldSynapses = neurons[i].getInputSynapses();
+
+            for (int j = 0; j < oldSynapses.length; j++) {
+                oldSynapses[j] = new Synapse(previousLayer.getNeuron(j).getOutputData(), oldSynapses[j].getWeight());
+            }
+            neurons[i].recalculateInputSynapsesData(oldSynapses);
+        }
+    }
+
     /** @return Количество нейронов в слое. */
     @Override
     public int getNumberOfNeurons() {

@@ -101,6 +101,10 @@ public class NeuralNetwork {
         tmp.add(new InputLayer(newInputData));
         tmp.addAll(layers);
         layers = tmp;
+
+        for (int i = 0; i < layers.size() - 1; i++) {
+            layers.get(i + 1).recalculateLayerWithSynapses(layers.get(i));
+        }
     }
 
     /**

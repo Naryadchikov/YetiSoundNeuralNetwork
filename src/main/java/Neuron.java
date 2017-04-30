@@ -24,4 +24,7 @@ public interface Neuron {
 
     /** Пересчитывает выходные данные. */
     void recalculateOutputData();
+
+    /** Пересчитывает входные данные нейронов */
+    void recalculateInputSynapsesData(Synapse[] newInputSynapses);
 }

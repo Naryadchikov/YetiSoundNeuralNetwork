@@ -11,7 +11,6 @@ public class Synapse {
         this.inputData = inputData;
     }
 
-
     public Synapse(float weight, float inputData) {
         this.weight = weight;
         this.inputData = inputData;
