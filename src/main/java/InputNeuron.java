@@ -9,6 +9,11 @@ public class InputNeuron implements Neuron {
         this.outputData = outputData;
     }
 
+    /** Создается нейрон смещения */
+    public InputNeuron() {
+        outputData = 1;
+    }
+
     /** @return Преобразованные данные. */
     @Override
     public float getOutputData() {

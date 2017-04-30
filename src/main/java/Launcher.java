@@ -9,7 +9,7 @@ public class Launcher {
         float[] idealData = {1.0f};
 
         XoRNetwork.addLayer(new InputLayer(inputData));
-        XoRNetwork.addLayer(new HiddenLayer(2));
+        XoRNetwork.addLayer(new HiddenLayer(3));
         XoRNetwork.addLayer(new OutputLayer(idealData));
 
         XoRNetwork.start();

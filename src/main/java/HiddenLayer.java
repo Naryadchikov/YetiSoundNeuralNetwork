@@ -22,7 +22,7 @@ public class HiddenLayer implements Layer {
      */
     @Override
     public void connect(Layer previousLayer) {
-        for (int i = 0; i < numberOfNeurons; i++) {
+        for (int i = 0; i < numberOfNeurons - 1; i++) {
             Synapse[] inputSynapses = new Synapse[previousLayer.getNumberOfNeurons()];
 
             for (int j = 0; j < inputSynapses.length; j++) {
@@ -30,7 +30,7 @@ public class HiddenLayer implements Layer {
             }
             neurons[i] = new HiddenNeuron(inputSynapses);
         }
-        //neurons[numberOfNeurons - 1] = new HiddenNeuron();
+        neurons[numberOfNeurons - 1] = new HiddenNeuron(); // Создается нейрон смещения
     }
 
     /**
