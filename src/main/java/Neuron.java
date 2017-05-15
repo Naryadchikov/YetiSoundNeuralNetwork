@@ -3,10 +3,14 @@
  */
 public interface Neuron {
 
-    /** @return Преобразованные данные. */
+    /**
+     * @return Преобразованные данные.
+     */
     float getOutputData();
 
-    /** @return Все входящие в нейрон синапсы. */
+    /**
+     * @return Все входящие в нейрон синапсы.
+     */
     Synapse[] getInputSynapses();
 
     /**
@@ -17,15 +21,20 @@ public interface Neuron {
 
     /**
      * Корректирует весовой коэффициент синапса.
+     *
      * @param index Номер входящего синапса.
      * @param deltaW Изменение весового коэффициента синапса.
      */
     void changeInputSynapse(int index, float deltaW);
 
-    /** Пересчитывает выходные данные. */
+    /**
+     * Пересчитывает выходные данные.
+     */
     void recalculateOutputData();
 
-    /** Изменяет входные данные нейронов
+    /**
+     * Изменяет входные данные нейронов
+     *
      * @param index Номер входящего синапса.
      * @param newInputData Новые входные данные.
      */
