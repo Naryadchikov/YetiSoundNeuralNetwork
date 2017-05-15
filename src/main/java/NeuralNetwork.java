@@ -18,43 +18,47 @@ public class NeuralNetwork {
 
     /**
      * Добавляет новый слой в сеть.
+     *
      * @param layer Слой.
      */
     public void addLayer(Layer layer) {
         layers.add(layer);
     }
 
-    /** Первая итерация. */
+    /**
+     * Первая итерация.
+     */
     public void start() {
         for (int i = 0; i < layers.size() - 1; i++) {
             layers.get(i + 1).connect(layers.get(i));
         }
     }
 
-    /** Одна итерация. */
-    public void iteration() {
-        for (int i = 1; i < layers.size(); i++) {
-            layers.get(i).recalculateLayer();
-        }
-    }
-
-    /** Одна тренировочная итерация по Методу Обратного Распространения (МОР). */
-    public void train() {
-        for (int i = layers.size() - 2; i >= 0; i--) {
-            layers.get(i).recalculateConnection(layers.get(i + 1), trainingSpeed, momentum);
-        }
-
-        for (int i = 1; i < layers.size(); i++) {
-            layers.get(i).recalculateLayer();
+    /**
+     * Одна итерация.
+     */
+    private void iteration() {
+        for (int i = 0; i < layers.size() - 1; i++) {
+            layers.get(i).recalculateNextLayer(layers.get(i + 1));
         }
     }
 
     /**
+     * Одна тренировочная итерация по Методу Обратного Распространения (МОР).
+     */
+    public void train() {
+        for (int i = layers.size() - 2; i >= 0; i--) {
+            layers.get(i).recalculateConnection(layers.get(i + 1), trainingSpeed, momentum);
+        }
+        iteration();
+    }
+
+    /**
      * Считает ошибку полученного результата по MSE.
+     *
      * @param idealData Идеальный ответ.
      * @return Ошибку по MSE.
-     * @throws UnsupportedOperationException Если размера массива идеальных данных не совпадает
-     *                                       с количемтвом нейронов в выходном слое.
+     * @throws UnsupportedOperationException Если размера массива идеальных данных не совпадает с количемтвом нейронов в выходном слое.
      */
     public float meanSquaredError(float[] idealData) {
         int numberOfNeurons = layers.get(layers.size() - 1).getNumberOfNeurons();
@@ -72,7 +76,9 @@ public class NeuralNetwork {
         return error;
     }
 
-    /** @return Результат работы нейронной сети. */
+    /**
+     * @return Результат работы нейронной сети.
+     */
     public float[] getResultData() {
         int numberOfNeurons = layers.get(layers.size() - 1).getNumberOfNeurons();
         float[] resultData = new float[numberOfNeurons];
@@ -86,32 +92,32 @@ public class NeuralNetwork {
 
     /**
      * Меняет входные данные.
+     *
      * @param newInputData Новые входные данные.
-     * @throws UnsupportedOperationException Если размера массива новых входных данных не совпадает
-     *                                       с количемтвом нейронов в входном слое.
+     * @param isWithBias Есть ли нейрон смещения.
+     * @throws UnsupportedOperationException Если размера массива новых входных данных не совпадает с количемтвом нейронов в входном слое.
      */
-    public void changeInputData(float[] newInputData) {
-        if (newInputData.length != layers.get(0).getNumberOfNeurons() - 1) {
+    public void changeInputData(boolean isWithBias, float[] newInputData) {
+        if ((isWithBias && newInputData.length != layers.get(0).getNumberOfNeurons() - 1) ||
+            (!isWithBias && newInputData.length != layers.get(0).getNumberOfNeurons())) {
             throw new UnsupportedOperationException();
         }
 
         List<Layer> tmp = new ArrayList<Layer>();
 
         layers.remove(0);
-        tmp.add(new InputLayer(newInputData));
+        tmp.add(new InputLayer(isWithBias, newInputData));
         tmp.addAll(layers);
         layers = tmp;
 
-        for (int i = 0; i < layers.size() - 1; i++) {
-            layers.get(i + 1).recalculateLayerWithSynapses(layers.get(i));
-        }
+        iteration();
     }
 
     /**
      * Меняет идеальные данные выходного слоя на новые.
+     *
      * @param newIdealData Новые идеальные данные.
-     * @throws UnsupportedOperationException Если размера массива новых идеальных данных не совпадает
-     *                                       с количемтвом нейронов в выходном слое.
+     * @throws UnsupportedOperationException Если размера массива новых идеальных данных не совпадает с количемтвом нейронов в выходном слое.
      */
     public void changeIdealData(float[] newIdealData) {
         int numberOfNeurons = layers.get(layers.size() - 1).getNumberOfNeurons();

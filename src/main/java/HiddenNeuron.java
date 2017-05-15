@@ -18,7 +18,9 @@ public class HiddenNeuron implements Neuron {
         outputData = 1 / (1 + (float) Math.pow(Math.E, -inputData));
     }
 
-    /** Создается нейрон смещения */
+    /**
+     * Создается нейрон смещения
+     */
     public HiddenNeuron() {
         isBias = true;
         inputSynapses = null;
@@ -26,13 +28,17 @@ public class HiddenNeuron implements Neuron {
         outputData = 1;
     }
 
-    /** @return Преобразованные данные. */
+    /**
+     * @return Преобразованные данные.
+     */
     @Override
     public float getOutputData() {
         return outputData;
     }
 
-    /** @return Все входящие в нейрон синапсы. */
+    /**
+     * @return Все входящие в нейрон синапсы.
+     */
     @Override
     public Synapse[] getInputSynapses() {
         if (!isBias) {
@@ -53,6 +59,7 @@ public class HiddenNeuron implements Neuron {
 
     /**
      * Корректирует весовой коэффициент синапса.
+     *
      * @param index Номер входящего синапса.
      * @param deltaW Изменение весового коэффициента синапса.
      */
@@ -65,7 +72,9 @@ public class HiddenNeuron implements Neuron {
         }
     }
 
-    /** Пересчитывает выходные данные. */
+    /**
+     * Пересчитывает выходные данные.
+     */
     @Override
     public void recalculateOutputData() {
         if (!isBias) {
@@ -77,12 +86,16 @@ public class HiddenNeuron implements Neuron {
         }
     }
 
-    /** Пересчитывает входные данные нейронов */
+    /**
+     * Изменяет входные данные нейронов
+     *
+     * @param index Номер входящего синапса.
+     * @param newInputData Новые входные данные.
+     */
     @Override
-    public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
+    public void changeInputSynapseData(int index, float newInputData) {
         if (!isBias) {
-            inputSynapses = newInputSynapses;
-            recalculateOutputData();
+            inputSynapses[index].setInputData(newInputData);
         }
     }
 }

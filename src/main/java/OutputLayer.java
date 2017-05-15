@@ -15,6 +15,7 @@ public class OutputLayer implements Layer {
 
     /**
      * Соединяет данный слой с предыдущем.
+     *
      * @param previousLayer Предыдущий слой.
      */
     @Override
@@ -31,6 +32,7 @@ public class OutputLayer implements Layer {
 
     /**
      * У выходного слоя нет выходных синапсов.
+     *
      * @param nextLayer Следующий слой.
      * @param trainingSpeed Скорость обучения сети.
      * @param momentum Момент.
@@ -40,28 +42,19 @@ public class OutputLayer implements Layer {
 
     }
 
-    /** Пересчитывает данные слоя. */
+    /**
+     * Пересчитывает данные следующего слоя.
+     *
+     * @param nextLayer Следующий слой.
+     */
     @Override
-    public void recalculateLayer() {
-        for (int i = 0; i < numberOfNeurons; i++) {
-            neurons[i].recalculateOutputData();
-        }
+    public void recalculateNextLayer(Layer nextLayer) {
+
     }
 
-    /** Пересчитывает данные слоя с изменением входных данных синапсов. */
-    @Override
-    public void recalculateLayerWithSynapses(Layer previousLayer) {
-        for (int i = 0; i < numberOfNeurons; i++) {
-            Synapse[] oldSynapses = neurons[i].getInputSynapses();
-
-            for (int j = 0; j < oldSynapses.length; j++) {
-                oldSynapses[j] = new Synapse(previousLayer.getNeuron(j).getOutputData(), oldSynapses[j].getWeight());
-            }
-            neurons[i].recalculateInputSynapsesData(oldSynapses);
-        }
-    }
-
-    /** @return Количество нейронов в слое. */
+    /**
+     * @return Количество нейронов в слое.
+     */
     @Override
     public int getNumberOfNeurons() {
         return numberOfNeurons;
@@ -78,6 +71,7 @@ public class OutputLayer implements Layer {
 
     /**
      * Возвращает дельту нейрона согласно Методу Обратного Распространения (МОР).
+     *
      * @param index Номер нейрона.
      * @return Дельта нейрона.
      */
@@ -90,9 +84,10 @@ public class OutputLayer implements Layer {
 
     /**
      * Меняет идеальные данные нейронов слоя на новые.
+     *
      * @param newIdealData Новые идеальные данные.
      */
     public void changeIdealData(float[] newIdealData) {
-       idealData = newIdealData;
+        idealData = newIdealData;
     }
 }

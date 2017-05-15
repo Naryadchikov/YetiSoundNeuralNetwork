@@ -8,19 +8,25 @@ public class InputLayer implements Layer {
     private float[][] previousDeltaW;
     private boolean isTrainedBefore;
 
-    public InputLayer(float[] data) {
-        numberOfNeurons = data.length + 1;
+    public InputLayer(boolean isWithBias, float[] data) {
+        numberOfNeurons = (isWithBias) ? data.length + 1 : data.length;
         neurons = new Neuron[numberOfNeurons];
         isTrainedBefore = false;
 
-        for (int i = 0; i < numberOfNeurons - 1; i++) {
+        int numberWithoutBias = (isWithBias) ? numberOfNeurons - 1 : numberOfNeurons;
+
+        for (int i = 0; i < numberWithoutBias; i++) {
             neurons[i] = new InputNeuron(data[i]);
         }
-        neurons[numberOfNeurons - 1] = new InputNeuron(); // Создается нейрон смещения
+
+        if (isWithBias) {
+            neurons[numberWithoutBias] = new InputNeuron(); // Создается нейрон смещения
+        }
     }
 
     /**
      * Входной слой первый, у него нету предыдущих.
+     *
      * @param previousLayer Предыдущий слой.
      */
     @Override
@@ -30,6 +36,7 @@ public class InputLayer implements Layer {
 
     /**
      * Пересчитывает связи по Методу Обратного Распространения (МОР).
+     *
      * @param nextLayer Следующий слой.
      * @param trainingSpeed Скорость обучения сети.
      * @param momentum Момент.
@@ -53,19 +60,27 @@ public class InputLayer implements Layer {
         isTrainedBefore = true;
     }
 
-    /** Входной слой не меняется. */
+    /**
+     * Пересчитывает данные следующего слоя.
+     *
+     * @param nextLayer Следующий слой.
+     */
     @Override
-    public void recalculateLayer() {
+    public void recalculateNextLayer(Layer nextLayer) {
+        for (int i = 0; i < numberOfNeurons; i++) {
+            for (int j = 0; j < nextLayer.getNumberOfNeurons(); j++) {
+                nextLayer.getNeuron(j).changeInputSynapseData(i, neurons[i].getOutputData());
+            }
+        }
 
+        for (int i = 0; i < nextLayer.getNumberOfNeurons(); i++) {
+            nextLayer.getNeuron(i).recalculateOutputData();
+        }
     }
 
-    /** Пересчитывает данные слоя с изменением входных данных синапсов. */
-    @Override
-    public void recalculateLayerWithSynapses(Layer previousLayer) {
-
-    }
-
-    /** @return Количество нейронов в слое. */
+    /**
+     * @return Количество нейронов в слое.
+     */
     @Override
     public int getNumberOfNeurons() {
         return numberOfNeurons;
@@ -82,6 +97,7 @@ public class InputLayer implements Layer {
 
     /**
      * Дельта входного нейрона равна нулю.
+     *
      * @param index Номер нейрона.
      * @return 0.
      */

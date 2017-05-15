@@ -4,12 +4,14 @@
 public class HiddenLayer implements Layer {
 
     private Neuron[] neurons;
+    private boolean isWithBias;
     private int numberOfNeurons;
     private float[] deltas;
     private float[][] previousDeltaW;
     private boolean isTrainedBefore;
 
-    public HiddenLayer(int numberOfNeurons) {
+    public HiddenLayer(boolean isWithBias, int numberOfNeurons) {
+        this.isWithBias = isWithBias;
         this.numberOfNeurons = numberOfNeurons;
         neurons = new Neuron[numberOfNeurons];
         deltas = new float[numberOfNeurons];
@@ -18,11 +20,14 @@ public class HiddenLayer implements Layer {
 
     /**
      * Соединяет данный слой с предыдущем.
+     *
      * @param previousLayer Предыдущий слой.
      */
     @Override
     public void connect(Layer previousLayer) {
-        for (int i = 0; i < numberOfNeurons - 1; i++) {
+        int numberWithoutBias = (isWithBias) ? numberOfNeurons - 1 : numberOfNeurons;
+
+        for (int i = 0; i < numberWithoutBias; i++) {
             Synapse[] inputSynapses = new Synapse[previousLayer.getNumberOfNeurons()];
 
             for (int j = 0; j < inputSynapses.length; j++) {
@@ -30,11 +35,15 @@ public class HiddenLayer implements Layer {
             }
             neurons[i] = new HiddenNeuron(inputSynapses);
         }
-        neurons[numberOfNeurons - 1] = new HiddenNeuron(); // Создается нейрон смещения
+
+        if (isWithBias) {
+            neurons[numberWithoutBias] = new HiddenNeuron(); // Создается нейрон смещения
+        }
     }
 
     /**
      * Пересчитывает связи по Методу Обратного Распространения (МОР).
+     *
      * @param nextLayer Следующий слой.
      * @param trainingSpeed Скорость обучения сети.
      * @param momentum Момент.
@@ -52,7 +61,8 @@ public class HiddenLayer implements Layer {
                 for (Synapse synapse : nextLayer.getNeuron(i).getInputSynapses()) {
                     tmp += synapse.getWeight() * nextLayer.getDelta(i);
                 }
-            } catch (NullPointerException ignored) {}
+            } catch (NullPointerException ignored) {
+            }
         }
 
         for (int i = 0; i < numberOfNeurons; i++) {
@@ -69,28 +79,27 @@ public class HiddenLayer implements Layer {
         isTrainedBefore = true;
     }
 
-    /** Пересчитывает данные слоя. */
+    /**
+     * Пересчитывает данные следующего слоя.
+     *
+     * @param nextLayer Следующий слой.
+     */
     @Override
-    public void recalculateLayer() {
+    public void recalculateNextLayer(Layer nextLayer) {
         for (int i = 0; i < numberOfNeurons; i++) {
-            neurons[i].recalculateOutputData();
-        }
-    }
-
-    /** Пересчитывает данные слоя с изменением входных данных синапсов. */
-    @Override
-    public void recalculateLayerWithSynapses(Layer previousLayer) {
-        for (int i = 0; i < numberOfNeurons - 1; i++) {
-            Synapse[] oldSynapses = neurons[i].getInputSynapses();
-
-            for (int j = 0; j < oldSynapses.length; j++) {
-                oldSynapses[j] = new Synapse(previousLayer.getNeuron(j).getOutputData(), oldSynapses[j].getWeight());
+            for (int j = 0; j < nextLayer.getNumberOfNeurons(); j++) {
+                nextLayer.getNeuron(j).changeInputSynapseData(i, neurons[i].getOutputData());
             }
-            neurons[i].recalculateInputSynapsesData(oldSynapses);
+        }
+
+        for (int i = 0; i < nextLayer.getNumberOfNeurons(); i++) {
+            nextLayer.getNeuron(i).recalculateOutputData();
         }
     }
 
-    /** @return Количество нейронов в слое. */
+    /**
+     * @return Количество нейронов в слое.
+     */
     @Override
     public int getNumberOfNeurons() {
         return numberOfNeurons;
@@ -107,6 +116,7 @@ public class HiddenLayer implements Layer {
 
     /**
      * Возвращает дельту нейрона согласно Методу Обратного Распространения (МОР).
+     *
      * @param index Номер нейрона.
      * @return Дельта нейрона.
      */

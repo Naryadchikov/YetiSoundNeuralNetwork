@@ -16,13 +16,17 @@ public class OutputNeuron implements Neuron {
         outputData = 1 / (1 + (float) Math.pow(Math.E, -inputData));
     }
 
-    /** @return Преобразованные данные. */
+    /**
+     * @return Преобразованные данные.
+     */
     @Override
     public float getOutputData() {
         return outputData;
     }
 
-    /** @return Все входящие в нейрон синапсы. */
+    /**
+     * @return Все входящие в нейрон синапсы.
+     */
     @Override
     public Synapse[] getInputSynapses() {
         return inputSynapses;
@@ -30,6 +34,7 @@ public class OutputNeuron implements Neuron {
 
     /**
      * У выходного нейрона нет выходных синапсов.
+     *
      * @param weight Весовой коэффициент синапса.
      * @return null.
      */
@@ -40,6 +45,7 @@ public class OutputNeuron implements Neuron {
 
     /**
      * Корректирует весовой коэффициент синапса.
+     *
      * @param index Номер входящего синапса.
      * @param deltaW Изменение весового коэффициента синапса.
      */
@@ -50,7 +56,9 @@ public class OutputNeuron implements Neuron {
         inputSynapses[index].setWeight(newW);
     }
 
-    /** Пересчитывает выходные данные. */
+    /**
+     * Пересчитывает выходные данные.
+     */
     @Override
     public void recalculateOutputData() {
         inputData = 0;
@@ -60,10 +68,14 @@ public class OutputNeuron implements Neuron {
         outputData = 1 / (1 + (float) Math.pow(Math.E, -inputData));
     }
 
-    /** Пересчитывает входные данные нейронов */
+    /**
+     * Изменяет входные данные нейронов
+     *
+     * @param index Номер входящего синапса.
+     * @param newInputData Новые входные данные.
+     */
     @Override
-    public void recalculateInputSynapsesData(Synapse[] newInputSynapses) {
-        inputSynapses = newInputSynapses;
-        recalculateOutputData();
+    public void changeInputSynapseData(int index, float newInputData) {
+        inputSynapses[index].setInputData(newInputData);
     }
 }
