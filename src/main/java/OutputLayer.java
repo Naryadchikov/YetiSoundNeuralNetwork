@@ -15,6 +15,7 @@ public class OutputLayer implements Layer {
 
     /**
      * Соединяет данный слой с предыдущем.
+     *
      * @param previousLayer Предыдущий слой.
      */
     @Override
@@ -31,6 +32,7 @@ public class OutputLayer implements Layer {
 
     /**
      * У выходного слоя нет выходных синапсов.
+     *
      * @param nextLayer Следующий слой.
      * @param trainingSpeed Скорость обучения сети.
      * @param momentum Момент.
@@ -42,6 +44,7 @@ public class OutputLayer implements Layer {
 
     /**
      * Пересчитывает данные следующего слоя.
+     *
      * @param nextLayer Следующий слой.
      */
     @Override
@@ -49,7 +52,9 @@ public class OutputLayer implements Layer {
 
     }
 
-    /** @return Количество нейронов в слое. */
+    /**
+     * @return Количество нейронов в слое.
+     */
     @Override
     public int getNumberOfNeurons() {
         return numberOfNeurons;
@@ -66,6 +71,7 @@ public class OutputLayer implements Layer {
 
     /**
      * Возвращает дельту нейрона согласно Методу Обратного Распространения (МОР).
+     *
      * @param index Номер нейрона.
      * @return Дельта нейрона.
      */
@@ -78,9 +84,10 @@ public class OutputLayer implements Layer {
 
     /**
      * Меняет идеальные данные нейронов слоя на новые.
+     *
      * @param newIdealData Новые идеальные данные.
      */
     public void changeIdealData(float[] newIdealData) {
-       idealData = newIdealData;
+        idealData = newIdealData;
     }
 }

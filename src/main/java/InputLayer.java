@@ -26,6 +26,7 @@ public class InputLayer implements Layer {
 
     /**
      * Входной слой первый, у него нету предыдущих.
+     *
      * @param previousLayer Предыдущий слой.
      */
     @Override
@@ -35,6 +36,7 @@ public class InputLayer implements Layer {
 
     /**
      * Пересчитывает связи по Методу Обратного Распространения (МОР).
+     *
      * @param nextLayer Следующий слой.
      * @param trainingSpeed Скорость обучения сети.
      * @param momentum Момент.
@@ -60,6 +62,7 @@ public class InputLayer implements Layer {
 
     /**
      * Пересчитывает данные следующего слоя.
+     *
      * @param nextLayer Следующий слой.
      */
     @Override
@@ -75,7 +78,9 @@ public class InputLayer implements Layer {
         }
     }
 
-    /** @return Количество нейронов в слое. */
+    /**
+     * @return Количество нейронов в слое.
+     */
     @Override
     public int getNumberOfNeurons() {
         return numberOfNeurons;
@@ -92,6 +97,7 @@ public class InputLayer implements Layer {
 
     /**
      * Дельта входного нейрона равна нулю.
+     *
      * @param index Номер нейрона.
      * @return 0.
      */

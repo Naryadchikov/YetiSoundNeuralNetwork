@@ -5,8 +5,8 @@ public class Launcher {
 
     public static void main(String[] args) {
         NeuralNetwork XoRNetwork = new NeuralNetwork(0.7f, 0.3f);
-        float[][] inputData = { {0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f} };
-        float[][] idealData = { {0.0f}, {1.0f}, {1.0f}, {0.0f} };
+        float[][] inputData = {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}};
+        float[][] idealData = {{0.0f}, {1.0f}, {1.0f}, {0.0f}};
         boolean isWithBias = true;
         int lastEpoch = 100000;
 
@@ -24,8 +24,8 @@ public class Launcher {
             }
         }
 
-        float[][] testData = { {0.0f, 0.0f}, {1.0f, 0.0f} };
-        float[][] idealTestResult = { {0.0f}, {1.0f} };
+        float[][] testData = {{0.0f, 0.0f}, {1.0f, 0.0f}};
+        float[][] idealTestResult = {{0.0f}, {1.0f}};
         float[] resultData;
 
         for (int i = 0; i < testData.length; i++) {
