@@ -1,9 +1,39 @@
 /**
  * Класс-Launcher.
  */
+import music.AwesomeMusic;
+import music.WaveFile;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
+
+import static music.WaveFile.*;
+
 public class Launcher {
+    int bitrate = 44100;
+
+    public  float[] FORSASHENIAKA(String FileName){
+        int DLINAPESNI = 90000000; // bitrate * t , где t - длина песни в секундах
+        float [] tmp = new float[DLINAPESNI];
+
+        System.out.println("Чтение данных из моно-файла:");
+        WaveFile wf = null;
+        try {
+            wf = new WaveFile(new File(FileName)); //"./src/main/resources/testwav1.wav"
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < DLINAPESNI; i++) {
+           tmp[i] =  wf.getSampleInt(i);
+        }
+        return tmp;
+    }
 
     public static void main(String[] args) {
+        createWave();
+
         NeuralNetwork XoRNetwork = new NeuralNetwork(0.7f, 0.3f);
         float[][] inputData = {{0.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}};
         float[][] idealData = {{0.0f}, {1.0f}, {1.0f}, {0.0f}};
