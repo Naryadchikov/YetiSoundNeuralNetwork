@@ -1,24 +1,45 @@
 package music;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.File;
 
+/**
+ * Класс, содержащий идеальные данные для тренировки сети.
+ */
 public class AwesomeMusic {
 
-    private ArrayList<Float> frames;
+    private WaveFile waveFile;
+    private int framesCount;
 
-    public AwesomeMusic(float[] frames) {
-        this.frames = new ArrayList<Float>();
-        for (Float frame : frames) {
-            this.frames.add(frame);
+    public AwesomeMusic(String FileName) {
+        try {
+            waveFile = new WaveFile(new File(FileName));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        framesCount = new Long(waveFile.getFramesCount()).intValue();
     }
 
-    public int getAmountOfFrames() {
-        return frames.size();
+    /**
+     * Возвращает массив идеальных данных для тренировки сети.
+     * @return Массив идеальных данных.
+     */
+    public float[] getIdealData() {
+        float[] idealData = new float[framesCount];
+
+        if (waveFile != null) {
+            for (int i = 0; i < framesCount; i++) {
+                idealData[i] = waveFile.getSampleInt(i);
+            }
+        }
+
+        return idealData;
     }
 
-    public float getIdealData(int index) {
-        return frames.get(index);
+    /**
+     * Возвращает количество кадров в песне
+     * @return Количество кадров в песне.
+     */
+    public int getFramesCount() {
+        return framesCount;
     }
 }
