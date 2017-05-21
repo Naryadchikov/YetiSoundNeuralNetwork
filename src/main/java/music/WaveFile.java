@@ -17,6 +17,107 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * Класс работы с Wave-файлом.
  */
 public class WaveFile {
+    //задание начальных условий
+    static int bitrate = 44100;
+    static float halfInt = Integer.MAX_VALUE / 2;
+    static double halfPi  = Math.PI / 2;
+    static float rate = 2 * (float)Math.PI / bitrate;
+    static float eps  = 1f;
+
+    //создание массива нот
+    static float[] notes    = {261.626f, 293.665f, 329.628f, 349.228f, 391.995f, 440.000f, 493.883f};   //до ре ми фа соль ля си
+    static int  [] intNotes = {     262,      294,      330,      350,      392,      440,      484};
+    static int [] foundNotes = new int[notes.length];
+
+    public  static int [] shiftNotes(int pos, int [] tmpNotes){
+        int [] shiftedNotes = new int[tmpNotes.length - 1];
+        for (int i = 0; i < shiftedNotes.length; i++)
+            if (i >= pos)
+                shiftedNotes[i] = tmpNotes[i+1];
+            else
+                shiftedNotes[i] = tmpNotes[i];
+
+        return shiftedNotes;
+    }
+
+    public static boolean find(int [] tmpNotes,int sum, int k ) {
+        for (int i = 0; i < tmpNotes.length; i++) {
+            if (sum - tmpNotes[i] > eps ) {
+                int[] shiftedNotes = shiftNotes(i, tmpNotes);
+                int kk = k + 1;
+                if ( find(shiftedNotes, sum - tmpNotes[i], kk) ) {
+                    foundNotes[k] = tmpNotes[i];
+                    return true;
+                }
+            } else if (Math.abs(sum - tmpNotes[i]) < eps) {
+                foundNotes[k] = tmpNotes[i];
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public  static int [] getFoundNotes(){
+        return foundNotes;
+    }
+    public static int [] calculateNotes(int t){
+        int [] tmp = new int [notes.length];
+        for (int i = 0; i < notes.length; i++){
+            tmp[i] =  (int) Math.round(halfInt * (Math.sin(rate * intNotes[i] * t)));
+        }
+        return tmp;
+    }
+
+    public static int [] deCalculateNotes(int t, int [] means){
+        int [] tmp = new int [notes.length];
+        for (int i = 0; i < notes.length; i++){
+            // tmp[i] =  (int) Math.round(halfInt * (Math.sin(rate * intNotes[i] * t)));
+            tmp[i] =  (int) Math.round(1/(rate * t) * (Math.asin(means[i] / halfInt)));
+        }
+        return tmp;
+    }
+
+    public static void saveWav(int[] saveSamples, String pathName){
+        WaveFile wf = null;
+        try {
+            wf = new WaveFile(4, bitrate, 1, saveSamples);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (wf != null) {
+                wf.saveFile(new File(pathName));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (wf != null) {
+            System.out.println("Продолжительность моно-файла: " + wf.getDurationTime() + " сек.");
+        }
+    }
+
+    public void createWave() {
+        int[] samples = new int[3000000]; // в моно - 44100 шаг на 1 секунду
+        int step = 40 * 6615;
+        int window = 1000000;
+
+        System.out.println("Создание моно-файла...");
+
+        for (int i = 0; i < step + 10; i++) {
+            int iw = i % window;
+
+            if ((iw >= 0) && (iw <= step)) {
+                //samples[i]  = (int) Math.round(halfInt * (Math.sin(rate * 330 * (i % (cons2 * 330 ) + 1))));
+                // samples[i] = (int) Math.round(halfInt * (Math.sin((rate * intNotes[2] * i) % halfPi )));
+                samples[i] = (int) Math.round(halfInt * (Math.sin((rate * intNotes[2] * (i))  )));
+                //samples[i] += (int) Math.round(halfInt * (Math.sin(rate * 262 * (i % (cons2 * 262 ) + 1))));
+                // samples[i] += (int) Math.round(halfInt * (Math.sin((rate * intNotes[0] * i) % halfPi)));
+                samples[i] += (int) Math.round(halfInt * (Math.sin((rate * intNotes[0] * (i)) )));
+            }
+        }
+
+        saveWav(samples,"./src/main/resources/testwav2.wav");
+    }
 
     private final int NOT_SPECIFIED = -1;
     private int sampleSize = NOT_SPECIFIED;
@@ -32,7 +133,7 @@ public class WaveFile {
      * @throws UnsupportedAudioFileException Проблема с музыкальным файлом
      * @throws IOException Проблема с файла
      */
-    WaveFile(File file) throws UnsupportedAudioFileException, IOException {
+    public WaveFile(File file) throws UnsupportedAudioFileException, IOException {
         if (!file.exists()) {
             throw new FileNotFoundException(file.getAbsolutePath());
         }
@@ -66,7 +167,7 @@ public class WaveFile {
      * @param samples Массив значений (данные)
      * @throws Exception если размер сэмпла меньше, чем необходимо для хранения переменной типа int
      */
-    WaveFile(int sampleSize, float sampleRate, int channels, int[] samples) throws Exception {
+    public WaveFile(int sampleSize, float sampleRate, int channels, int[] samples) throws Exception {
         int INT_SIZE = 4;
 
         if (sampleSize < INT_SIZE) {
