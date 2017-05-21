@@ -1,4 +1,5 @@
 import music.AwesomeMusic;
+import music.WaveFile;
 
 /**
  * Класс-Launcher.
@@ -39,32 +40,44 @@ public class Launcher {
 //            System.out.println("Final result is: " + resultData[0]);
 //            System.out.println("Ideal answer is: " + idealTestResult[i][0]);
 //        }
-        AwesomeMusic[] trainingSongs = new AwesomeMusic[10];
+        AwesomeMusic[] trainingSongs = new AwesomeMusic[1];
+        String[] awesomeSongsPath = {"./bin/1.wav"};
         float[][] inputData = { {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-            {0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-            {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
-            {1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f} };
+                                {0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f},
+                                {1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f},
+                                {1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f},
+                                {0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f},
+                                {1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f},
+                                {1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f},
+                                {1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},
+                                {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f} };
 
         for (int i = 0; i < trainingSongs.length; i++) {
-            trainingSongs[i] = new AwesomeMusic("InsertPathToFileHere");
+            trainingSongs[i] = new AwesomeMusic(awesomeSongsPath[i]);
         }
 
         NeuralNetwork[] YetiSoundNetworks = new NeuralNetwork[trainingSongs[0].getFramesCount()];
         boolean isWithBias = true;
 
         for (int i = 0; i < YetiSoundNetworks.length; i++) {
-            YetiSoundNetworks[i] = new NeuralNetwork(0.005f, 0.01f);
+            YetiSoundNetworks[i] = new NeuralNetwork(0.01f, 0.1f);
         }
+
+        float[] resultData = new float[YetiSoundNetworks.length];
+        int[] resultFrames = new int[YetiSoundNetworks.length];
 
         for (int i = 0; i < YetiSoundNetworks.length; i++) {
             float[][] idealData = new float[trainingSongs.length][1];
-            int lastEpoch = 10000;
+            int lastEpoch = 100;
 
             for (int j = 0; j < trainingSongs.length; j++) {
                 idealData[j][0] = trainingSongs[j].getIdealData()[i];
+                idealData[j][0] = idealData[j][0] / (Integer.MAX_VALUE / 2);
             }
 
             YetiSoundNetworks[i].addLayer(new InputLayer(isWithBias, inputData[0]));
+            YetiSoundNetworks[i].addLayer(new HiddenLayer(isWithBias, 5));
+            YetiSoundNetworks[i].addLayer(new HiddenLayer(isWithBias, 4));
             YetiSoundNetworks[i].addLayer(new HiddenLayer(isWithBias, 3));
             YetiSoundNetworks[i].addLayer(new OutputLayer(idealData[0]));
 
@@ -77,6 +90,13 @@ public class Launcher {
                     YetiSoundNetworks[i].train();
                 }
             }
+            System.out.println("End training for " + i + " network.");
+
+            YetiSoundNetworks[i].changeInputData(isWithBias, inputData[0]);
+            resultData[i] = YetiSoundNetworks[i].getResultData()[0];
+            resultFrames[i] = (int) (resultData[i] * (Integer.MAX_VALUE / 2));
         }
+
+        WaveFile.saveWav(resultFrames, "./bin/AwesomeSong.wav");
     }
 }

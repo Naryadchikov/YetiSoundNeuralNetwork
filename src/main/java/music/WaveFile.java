@@ -77,39 +77,46 @@ public class WaveFile {
         return tmp;
     }
 
-    public static void createWave() {
+    public static void saveWav(int[] saveSamples, String pathName){
+        WaveFile wf = null;
+        try {
+            wf = new WaveFile(4, bitrate, 1, saveSamples);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (wf != null) {
+                wf.saveFile(new File(pathName));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (wf != null) {
+            System.out.println("Продолжительность моно-файла: " + wf.getDurationTime() + " сек.");
+        }
+    }
+
+    public void createWave() {
         int[] samples = new int[3000000]; // в моно - 44100 шаг на 1 секунду
-        int step = 40*6615;
+        int step = 40 * 6615;
         int window = 1000000;
 
         System.out.println("Создание моно-файла...");
 
         for (int i = 0; i < step + 10; i++) {
-
             int iw = i % window;
 
             if ((iw >= 0) && (iw <= step)) {
                 //samples[i]  = (int) Math.round(halfInt * (Math.sin(rate * 330 * (i % (cons2 * 330 ) + 1))));
-               // samples[i] = (int) Math.round(halfInt * (Math.sin((rate * intNotes[2] * i) % halfPi )));
+                // samples[i] = (int) Math.round(halfInt * (Math.sin((rate * intNotes[2] * i) % halfPi )));
                 samples[i] = (int) Math.round(halfInt * (Math.sin((rate * intNotes[2] * (i))  )));
                 //samples[i] += (int) Math.round(halfInt * (Math.sin(rate * 262 * (i % (cons2 * 262 ) + 1))));
-               // samples[i] += (int) Math.round(halfInt * (Math.sin((rate * intNotes[0] * i) % halfPi)));
+                // samples[i] += (int) Math.round(halfInt * (Math.sin((rate * intNotes[0] * i) % halfPi)));
                 samples[i] += (int) Math.round(halfInt * (Math.sin((rate * intNotes[0] * (i)) )));
             }
         }
-        WaveFile wf = null;
-        try {
-            wf = new WaveFile(4, bitrate, 1, samples);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            wf.saveFile(new File("./src/main/resources/testwav2.wav"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Продолжительность моно-файла: " + wf.getDurationTime() + " сек.");
 
+        saveWav(samples,"./src/main/resources/testwav2.wav");
     }
 
     private final int NOT_SPECIFIED = -1;
